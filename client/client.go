@@ -3,17 +3,19 @@ package client
 import (
 	"crypto/tls"
 	"errors"
-	"github.com/mythologyli/zju-connect/log"
-	"inet.af/netaddr"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/mythologyli/zju-connect/log"
+	"inet.af/netaddr"
 )
 
 type EasyConnectClient struct {
 	server        string // Example: rvpn.zju.edu.cn:443. No protocol prefix
 	username      string
 	password      string
+	totpKey       string
 	testMultiLine bool
 	parseResource bool
 
@@ -32,17 +34,19 @@ type EasyConnectClient struct {
 	ipReverse []byte
 }
 
-func NewEasyConnectClient(server, username, password, twfID string, testMultiLine, parseResource bool) *EasyConnectClient {
+func NewEasyConnectClient(server, username, password, totpKey, twfID string, testMultiLine, parseResource bool) *EasyConnectClient {
 	return &EasyConnectClient{
 		server:        server,
 		username:      username,
 		password:      password,
+		totpKey:       totpKey,
 		testMultiLine: testMultiLine,
 		parseResource: parseResource,
 		httpClient: &http.Client{
 			Transport: &http.Transport{
 				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			}},
+			},
+		},
 		twfID: twfID,
 	}
 }

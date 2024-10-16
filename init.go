@@ -4,11 +4,12 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/BurntSushi/toml"
-	"github.com/mythologyli/zju-connect/configs"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/BurntSushi/toml"
+	"github.com/mythologyli/zju-connect/configs"
 )
 
 func getTOMLVal[T int | uint64 | string | bool](valPointer *T, defaultVal T) T {
@@ -31,6 +32,7 @@ func parseTOMLConfig(configFile string, conf *configs.Config) error {
 	conf.ServerPort = getTOMLVal(confTOML.ServerPort, 443)
 	conf.Username = getTOMLVal(confTOML.Username, "")
 	conf.Password = getTOMLVal(confTOML.Password, "")
+	conf.TOTPKey = getTOMLVal(confTOML.TOTPKey, "")
 	conf.DisableServerConfig = getTOMLVal(confTOML.DisableServerConfig, false)
 	conf.DisableZJUConfig = getTOMLVal(confTOML.DisableZJUConfig, false)
 	conf.DisableZJUDNS = getTOMLVal(confTOML.DisableZJUDNS, false)
@@ -108,6 +110,7 @@ func init() {
 	flag.IntVar(&conf.ServerPort, "port", 443, "EasyConnect port address")
 	flag.StringVar(&conf.Username, "username", "", "Your username")
 	flag.StringVar(&conf.Password, "password", "", "Your password")
+	flag.StringVar(&conf.TOTPKey, "totp-key", "", "Your TOTP key")
 	flag.BoolVar(&conf.DisableServerConfig, "disable-server-config", false, "Don't parse server config")
 	flag.BoolVar(&conf.DisableZJUConfig, "disable-zju-config", false, "Don't use ZJU config")
 	flag.BoolVar(&conf.DisableZJUDNS, "disable-zju-dns", false, "Use local DNS instead of ZJU DNS")

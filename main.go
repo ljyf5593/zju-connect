@@ -5,6 +5,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/mythologyli/zju-connect/client"
 	"github.com/mythologyli/zju-connect/configs"
 	"github.com/mythologyli/zju-connect/dial"
@@ -16,10 +21,6 @@ import (
 	"github.com/mythologyli/zju-connect/stack/gvisor"
 	"github.com/mythologyli/zju-connect/stack/tun"
 	"inet.af/netaddr"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 var conf configs.Config
@@ -45,6 +46,7 @@ func main() {
 		conf.ServerAddress+":"+fmt.Sprintf("%d", conf.ServerPort),
 		conf.Username,
 		conf.Password,
+		conf.TOTPKey,
 		conf.TwfID,
 		!conf.DisableMultiLine,
 		!conf.DisableServerConfig,
